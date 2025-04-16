@@ -16,5 +16,4 @@ public class YearTest {
         arrange();
         assertEquals(2025, year.getYear());
     }
-
 }
