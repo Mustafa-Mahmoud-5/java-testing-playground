@@ -205,4 +205,15 @@ public class YearTest {
         assertEquals(startCalender, year.getStart());
         assertEquals(endCalender, year.getEnd());
     }
+
+
+    @Test
+    public void previous_SHOULD_returnPreviousYear_WHEN_receivesAnyYearValue() {
+        Year expectedPrevYear = new Year(2024);
+
+        Year actualPrevYear = (Year) new Year(2025).previous();
+
+        assertEquals(expectedPrevYear, actualPrevYear);
+
+    }
 }
