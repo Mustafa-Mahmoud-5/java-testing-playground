@@ -34,4 +34,17 @@ public class YearTest {
         Year year2 = new Year(2025);
         assertEquals(1, year1.compareTo(year2));
     }
+
+
+    @Test public void equals_SHOULD_returnTrue_WHEN_receiveSameYear() {
+        Year year1 = new Year(2025);
+        Year year2 = new Year(2025);
+        assertTrue(year1.equals(year2));
+    }
+
+    @Test public void equals_SHOULD_returnFalse_WHEN_receiveDifferentYear() {
+        Year year1 = new Year(2025);
+        Year year2 = new Year(2026);
+        assertFalse(year1.equals(year2));
+    }
 }
