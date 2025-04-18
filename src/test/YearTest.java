@@ -1,5 +1,6 @@
 package test;
 
+import org.jfree.data.time.TimePeriodFormatException;
 import org.jfree.data.time.Year;
 import org.junit.Test;
 
@@ -121,5 +122,39 @@ public class YearTest {
         Year actualNextYear = (Year) new Year(2025).next();
 
         assertEquals(expectedNextYear, actualNextYear);
+    }
+
+    @Test
+    public void parseYear_SHOULD_returnYearObject_WHEN_receivesYearValue() {
+        //parseYear takes a year string and returns its year obj
+
+        // arrange
+        String yearValue = "2025";
+        Year expectedYearObj = new Year(2025);
+        // act
+        Year parsedYear = Year.parseYear(yearValue);
+
+        // assertion
+        assertEquals(expectedYearObj, parsedYear);
+    }
+
+    @Test
+    public void parseYear_SHOULD_returnTimePeriodException_WHEN_receivesInvalidYearValue() {
+        // arrange
+        String invalidYearValue = "anything";
+
+        // assert
+        assertThrows(TimePeriodFormatException.class, () -> {
+            // act
+            Year.parseYear(invalidYearValue);
+        });
+    }
+
+
+    @Test
+    public void parseYear_SHOULD_throwNullPointerException_WHEN_receivesNullYearValue() {
+        assertThrows(NullPointerException.class, () -> {
+            Year.parseYear(null);
+        });
     }
 }
