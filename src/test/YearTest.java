@@ -1,5 +1,6 @@
 package test;
 
+import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimePeriodFormatException;
 import org.jfree.data.time.Year;
 import org.junit.Test;
@@ -215,5 +216,14 @@ public class YearTest {
 
         assertEquals(expectedPrevYear, actualPrevYear);
 
+    }
+
+    @Test
+    public void previous_SHOULD_returnNegativePrevious_WHEN_receiveZero() {
+        Year yearZero = new Year(0);
+
+        Year negativeYear = new Year(-1);
+
+        assertEquals(negativeYear, yearZero.previous());
     }
 }
