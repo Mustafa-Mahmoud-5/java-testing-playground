@@ -5,6 +5,8 @@ import org.jfree.data.time.Year;
 import org.junit.Test;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 // get all assertions
 import static org.junit.Assert.*;
@@ -156,5 +158,51 @@ public class YearTest {
         assertThrows(NullPointerException.class, () -> {
             Year.parseYear(null);
         });
+    }
+
+    @Test
+    public void peg_SHOULD_shouldEvaluateToStartAndEndTime_WHEN_receivesValidStartAndEndCalenderYear() {
+
+        // DOCUMENTATION INFO about peg() method:
+        // peg(): Recalculates the start date/time and end date/time for this time period relative to
+        // the supplied calendar (which incorporates a time zone).
+
+
+        // TEST LOGIC: make a calendar with a GMT timezone, give it to peg method
+        // set the start of this calender obj
+        // compare the year.getStart() to calendar time
+        // set the end date-time of this calender
+        // compare the year.getEnd() to calender time after setting the end of the year
+
+
+        // Arrange
+        Year year = new Year(2020);
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+
+        // Act
+        year.peg(calendar);
+
+
+        calendar.set(Calendar.YEAR, 2020);
+        calendar.set(Calendar.MONTH, Calendar.JANUARY);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Date startCalender = calendar.getTime();
+
+        // set the end cal
+        calendar.set(Calendar.MONTH, Calendar.DECEMBER);
+        calendar.set(Calendar.DAY_OF_MONTH, 31);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        Date endCalender = calendar.getTime();
+
+        // Assert
+        assertEquals(startCalender, year.getStart());
+        assertEquals(endCalender, year.getEnd());
     }
 }
