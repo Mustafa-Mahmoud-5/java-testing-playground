@@ -9,33 +9,60 @@ import static org.junit.Assert.*;
 public class DiscountManagerTest {
 
     @Test
-    public void testCalculatePriceWhenDiscountsSeasonIsFalse() throws Exception {
-        // Arrange
+    public void testCalculatePriceWhenDiscountsSeasonIsFalse() {
         boolean isDiscountsSeason = false;
         double originalPrice = 100.0;
         double expectedPrice = 100.0;
 
-        Mockery mockingContext = new Mockery();
-        IDiscountCalculator mockedDependency = mockingContext.mock(IDiscountCalculator.class);
-        mockingContext.checking(new Expectations(){
-            {
-                // make sure that none of the functions are called
-            }
-        });
-        DiscountManager discountManager = new DiscountManager(isDiscountsSeason, mockedDependency);
-        // Act
+        Mockery context = new Mockery();
+        IDiscountCalculator mockedCalculator = context.mock(IDiscountCalculator.class);
 
+        // Expect that no methods will be called when isDiscountsSeason is false
+        context.checking(new Expectations() { });
 
-
-        // Assert
-        // make sure that mocking Expectations Is Satisfied
-        // make sure that the actual value exactly equals the expected value
+        DiscountManager manager = new DiscountManager(isDiscountsSeason, mockedCalculator);
+        double actualPrice = manager.calculatePriceAfterDiscount(originalPrice);
+        assertEquals(expectedPrice, actualPrice , 0.001);
+        context.assertIsSatisfied();
     }
 
     @Test
-    public void testCalculatePriceWhenDiscountsSeasonIsTrueAndSpecialWeekIsTrue() throws Exception {
+    public void testCalculatePriceWhenDiscountsSeasonIsTrueAndSpecialWeekIsTrue() {
+        boolean isDiscountsSeason = true;
+        double originalPrice = 200.0;
+        double expectedPrice = 160.0; // 20% discount during special week
 
+        Mockery context = new Mockery();
+        IDiscountCalculator mockedCalculator = context.mock(IDiscountCalculator.class);
+
+        context.checking(new Expectations() {{
+            oneOf(mockedCalculator).isTheSpecialWeek(); will(returnValue(true));
+        }});
+
+        DiscountManager manager = new DiscountManager(isDiscountsSeason, mockedCalculator);
+        double actualPrice = manager.calculatePriceAfterDiscount(originalPrice);
+        assertEquals(expectedPrice, actualPrice, 0.001);
+        context.assertIsSatisfied();
     }
 
-    // test missing cases
+    @Test
+    public void testCalculatePriceWhenDiscountsSeasonIsTrueAndSpecialWeekIsFalse() {
+        boolean isDiscountsSeason = true;
+        double originalPrice = 150.0;
+        double discountPercent = 0.9; // 10% discount
+        double expectedPrice = 135.0; // 150 * 0.9
+
+        Mockery context = new Mockery();
+        IDiscountCalculator mockedCalculator = context.mock(IDiscountCalculator.class);
+
+        context.checking(new Expectations() {{
+            oneOf(mockedCalculator).isTheSpecialWeek(); will(returnValue(false));
+            oneOf(mockedCalculator).getDiscountPercentage(); will(returnValue(discountPercent));
+        }});
+
+        DiscountManager manager = new DiscountManager(isDiscountsSeason, mockedCalculator);
+        double actualPrice = manager.calculatePriceAfterDiscount(originalPrice);
+        assertEquals(expectedPrice, actualPrice, 0.001);
+        context.assertIsSatisfied();
+    }
 }
