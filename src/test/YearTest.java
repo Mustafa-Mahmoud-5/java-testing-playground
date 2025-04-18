@@ -47,4 +47,31 @@ public class YearTest {
         Year year2 = new Year(2026);
         assertFalse(year1.equals(year2));
     }
+
+
+    @Test  public void getFirstMillisecond_SHOULD_returnFirstMillisecond_WHEN_receiveSameCalenderYear() {
+        // arrange data
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2025, Calendar.JANUARY, 1, 0, 0, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        long firstMillisecond = calendar.getTimeInMillis();
+
+        Year year = new Year(2025);
+
+
+        // act(to be tested)
+        long yearFMS = year.getFirstMillisecond(calendar); // receive the same calender year
+
+
+        // assertion
+        assertEquals(firstMillisecond, yearFMS);
+    }
+
+    @Test public void getFirstMillisecond_SHOULD_throwNullPointerException_WHEN_receivesNoCalenderYear() {
+        Year year = new Year(2025);
+
+        assertThrows(NullPointerException.class, () -> {
+            year.getFirstMillisecond((Calendar) null); // idk why it wanted type casting
+        });
+    }
 }
