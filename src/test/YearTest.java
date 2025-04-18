@@ -99,4 +99,17 @@ public class YearTest {
 
         assertEquals(yearVal, year.getSerialIndex());
     }
+
+
+    @Test public void hashCode_SHOULD_returnSameHash_WHEN_receiveSameYearValue() {
+        Year year1 = new Year(2025);
+        Year year2 = new Year(2025);
+        assertEquals(year1.hashCode(), year2.hashCode());
+    }
+
+    @Test public void hashCode_SHOULD_returnDifferentHash_WHEN_receiveDifferentYearValue() {
+        Year year1 = new Year(2025);
+        Year year2 = new Year(2026);
+        assertNotEquals(year1.hashCode(), year2.hashCode());
+    }
 }
