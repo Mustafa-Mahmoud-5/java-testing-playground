@@ -226,4 +226,29 @@ public class YearTest {
 
         assertEquals(negativeYear, yearZero.previous());
     }
+
+    @Test
+    public void toString_SHOULD_returnString_WHEN_receivesYearValue() {
+        // Arrange
+        Year year = new Year(-500);
+
+        // Act
+        String result = year.toString();
+
+        // Assert
+        assertEquals("-500", result);
+    }
+
+
+    @Test
+    public void toString_SHOULD_throwNullPointerException_WHEN_calledOnNull() {
+        // Arrange
+        Year year = null;
+
+        // Act & Assert
+        assertThrows(NullPointerException.class, () -> {
+            year.toString();
+        });
+    }
+
 }
