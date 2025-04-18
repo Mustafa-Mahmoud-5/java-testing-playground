@@ -112,4 +112,14 @@ public class YearTest {
         Year year2 = new Year(2026);
         assertNotEquals(year1.hashCode(), year2.hashCode());
     }
+
+
+    @Test
+    public void next_SHOULD_returnNextYear_WHEN_receivesAnyYearValue() {
+        Year expectedNextYear = new Year(2026);
+
+        Year actualNextYear = (Year) new Year(2025).next();
+
+        assertEquals(expectedNextYear, actualNextYear);
+    }
 }
