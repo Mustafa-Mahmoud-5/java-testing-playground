@@ -74,4 +74,29 @@ public class YearTest {
             year.getFirstMillisecond((Calendar) null); // idk why it wanted type casting
         });
     }
+
+
+    @Test public void getLastMillisecond_SHOULD_returnLastMillisecond_WHEN_receiveSameCalenderYear() {
+        // arrange
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2025, Calendar.DECEMBER, 31, 23, 59, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        long calenderLMS = calendar.getTimeInMillis();
+        Year year = new Year(2025);
+
+        // act
+        long yearLMS = year.getLastMillisecond(calendar);
+
+        // assertion
+        assertEquals(calenderLMS, yearLMS);
+    }
+
+
+    @Test public void getSerialIndex_SHOULD_returnIndex_WHEN_receiveSameYearValue() {
+        int yearVal = 2025;
+
+        Year year = new Year(2025);
+
+        assertEquals(yearVal, year.getSerialIndex());
+    }
 }
