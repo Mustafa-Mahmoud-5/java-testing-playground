@@ -55,7 +55,7 @@ public class DiscountManagerTest {
         boolean isDiscountsSeason = true;
         double originalPrice = 150.0;
         int discountPercent = 9; // 9% discount
-        double expectedPrice = originalPrice * discountPercent / 100;
+        double expectedPrice = originalPrice -  (originalPrice * discountPercent / 100);
 
         Mockery context = new Mockery();
         IDiscountCalculator mockedCalculator = context.mock(IDiscountCalculator.class);
