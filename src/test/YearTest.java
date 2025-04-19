@@ -1,8 +1,3 @@
-/*
- * Documentation:
- * https://www.jfree.org/jfreechart/api/javadoc/org/jfree/data/time/Year.html
- * */
-
 package test;
 
 import org.jfree.data.time.RegularTimePeriod;
@@ -59,6 +54,16 @@ public class YearTest {
         });
     }
 
+    // Based on modified doc it should fail
+    @Test
+    public void intParamConstructor_SHOULD_throwIllegalArgumentException_WHEN_itReceivesBelow1900 () {
+
+        int before1900 = 1900-1;
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Year(before1900);
+        });
+    }
+
 
     @Test
     public void dateParamConstructor_SHOULD_return_sameGivenArg_WHEN_weCallGetDateMethod() {
@@ -112,6 +117,14 @@ public class YearTest {
         Year year1 = new Year(2026);
         Year year2 = new Year(2025);
         assertEquals(1, year1.compareTo(year2));
+    }
+
+
+    // should fail
+    @Test
+    public void compareTo_SHOULD_throwNullPointerException_WHEN_inputIsNull() {
+        Year year = new Year(2025);
+        assertThrows(NullPointerException.class, () -> year.compareTo(null));
     }
 
 
@@ -208,6 +221,13 @@ public class YearTest {
         assertEquals(expectedNextYear, actualNextYear);
     }
 
+    @Test
+    public void next_SHOULD_returnNull_WHEN_yearIsMaximumAllowed() {
+        Year year = new Year(9999);
+        assertNull(year.next());
+
+    }
+
     // parseYear
     @Test
     public void parseYear_SHOULD_returnYearObject_WHEN_receivesYearValue() {
@@ -223,18 +243,19 @@ public class YearTest {
         assertEquals(expectedYearObj, parsedYear);
     }
 
-    // parseYear
+    // should fail in new doc
     @Test
-    public void parseYear_SHOULD_returnTimePeriodException_WHEN_receivesInvalidYearValue() {
-        // arrange
-        String invalidYearValue = "anything";
-
-        // assert
-        assertThrows(TimePeriodFormatException.class, () -> {
-            // act
-            Year.parseYear(invalidYearValue);
-        });
+    public void parseYear_SHOULD_returnNull_WHEN_inputIsNonNumeric() {
+        assertNull(Year.parseYear("abcd"));
     }
+
+
+    // should fail in new doc
+    @Test
+    public void parseYear_SHOULD_returnNull_WHEN_inputIsEmptyString() {
+        assertNull(Year.parseYear(""));
+    }
+
 
 
     @Test
@@ -311,6 +332,17 @@ public class YearTest {
 
         assertEquals(negativeYear, yearZero.previous());
     }
+
+
+    // based on the modified Doc, this should fail
+    @Test
+    public void previous_SHOULD_returnNull_WHEN_reeivesPrev1900() {
+        int year = 1900;
+        Year prevYear = (Year) new Year(year).previous();
+        assertNull(prevYear);
+    }
+
+
 
     // toString
     @Test
