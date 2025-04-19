@@ -18,7 +18,11 @@ public class DiscountManagerTest {
         IDiscountCalculator mockedCalculator = context.mock(IDiscountCalculator.class);
 
         // Expect that no methods will be called when isDiscountsSeason is false
-        context.checking(new Expectations() { });
+        context.checking(new Expectations() {
+            {
+                never(mockedCalculator); // as isDiscountsSeason will be false, calculator methods will never be reached
+            }
+        });
 
         DiscountManager manager = new DiscountManager(isDiscountsSeason, mockedCalculator);
         double actualPrice = manager.calculatePriceAfterDiscount(originalPrice);
@@ -37,6 +41,7 @@ public class DiscountManagerTest {
 
         context.checking(new Expectations() {{
             oneOf(mockedCalculator).isTheSpecialWeek(); will(returnValue(true));
+            never(mockedCalculator).getDiscountPercentage(); // last line should never get executed
         }});
 
         DiscountManager manager = new DiscountManager(isDiscountsSeason, mockedCalculator);
@@ -49,8 +54,8 @@ public class DiscountManagerTest {
     public void testCalculatePriceWhenDiscountsSeasonIsTrueAndSpecialWeekIsFalse() {
         boolean isDiscountsSeason = true;
         double originalPrice = 150.0;
-        double discountPercent = 0.9; // 10% discount
-        double expectedPrice = 135.0; // 150 * 0.9
+        int discountPercent = 9; // 9% discount
+        double expectedPrice = originalPrice * discountPercent / 100;
 
         Mockery context = new Mockery();
         IDiscountCalculator mockedCalculator = context.mock(IDiscountCalculator.class);
