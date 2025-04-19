@@ -1,3 +1,8 @@
+/*
+ * Documentation:
+ * https://www.jfree.org/jfreechart/api/javadoc/org/jfree/data/time/Year.html
+ * */
+
 package test;
 
 import org.jfree.data.time.RegularTimePeriod;
@@ -7,6 +12,7 @@ import org.junit.Test;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 // get all assertions
@@ -18,12 +24,81 @@ public class YearTest {
     private void arrange() {
         year = new Year();
     }
+
+
+    // Default Constructor
+
     @Test
     public void testYearDefaultCtor() {
         arrange();
         assertEquals(2025, year.getYear());
     }
 
+    @Test
+    public void defaultConstructor_SHOULDNOT_returnNull() {
+        Year year = new Year();
+        assertNotNull(year);
+    }
+
+
+    // int param constructor
+    @Test
+    public void intParameterConstructor_SHOILD_return_sameGivenArg_WHEN_weCallGetYearMethod() {
+        int yearIntVal = 2025;
+        Year year = new Year(yearIntVal);
+        assertEquals(yearIntVal, year.getYear());
+    }
+
+    @Test
+    public void intParamConstructor_SHOULD_throwIllegalArgumentException_WHEN_itReceivesBeforeMin () {
+        int beforeMin = Year.MINIMUM_YEAR - 1;
+//        System.out.println(Year.MINIMUM_YEAR-1);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Year(beforeMin);
+        });
+    }
+
+
+    @Test
+    public void dateParamConstructor_SHOULD_return_sameGivenArg_WHEN_weCallGetDateMethod() {
+
+        // arrange
+        int expectedYear = 2025;
+        int dateVal = expectedYear - 1900;
+        Date date = new Date( dateVal, 0, 1);
+
+        // act
+        Year year = new Year(date);
+
+        // assert
+        assertEquals(expectedYear, year.getYear());
+    }
+
+
+    @Test public void dateParamConstructor_SHOULD_throwNullPointerException_WHEN_receivesNullDate() {
+        // arrange
+        Date date = null;
+
+        // assert
+        assertThrows(NullPointerException.class, () -> {
+            // act
+            new Year(date);
+        });
+    }
+
+
+    // 3-params constructor
+    @Test
+    public void Year_SHOULD_extractYearCorrectly_WHEN_createdWithValidDateAndDefaults() {
+        int expectedYear = 2025;
+
+        Date date = new Date(expectedYear-1900, 0, 1); // Jan 1, 2010
+        Year year = new Year(date, TimeZone.getDefault(), Locale.getDefault());
+        assertEquals(expectedYear, year.getYear());
+    }
+
+    // compareTo
 
     @Test
     public void compareTo_SHOULD_returnNegative() {
@@ -40,6 +115,7 @@ public class YearTest {
     }
 
 
+    // equals
     @Test public void equals_SHOULD_returnTrue_WHEN_receiveSameYear() {
         Year year1 = new Year(2025);
         Year year2 = new Year(2025);
@@ -53,6 +129,7 @@ public class YearTest {
     }
 
 
+    // getFirstMillisecond
     @Test  public void getFirstMillisecond_SHOULD_returnFirstMillisecond_WHEN_receiveSameCalenderYear() {
         // arrange data
         Calendar calendar = Calendar.getInstance();
@@ -80,6 +157,7 @@ public class YearTest {
     }
 
 
+    // getLastMillisecond
     @Test public void getLastMillisecond_SHOULD_returnLastMillisecond_WHEN_receiveSameCalenderYear() {
         // arrange
         Calendar calendar = Calendar.getInstance();
@@ -96,6 +174,7 @@ public class YearTest {
     }
 
 
+    // getSerialIndex
     @Test public void getSerialIndex_SHOULD_returnIndex_WHEN_receiveSameYearValue() {
         int yearVal = 2025;
 
@@ -105,6 +184,7 @@ public class YearTest {
     }
 
 
+    // hashCode
     @Test public void hashCode_SHOULD_returnSameHash_WHEN_receiveSameYearValue() {
         Year year1 = new Year(2025);
         Year year2 = new Year(2025);
@@ -118,6 +198,7 @@ public class YearTest {
     }
 
 
+    // next
     @Test
     public void next_SHOULD_returnNextYear_WHEN_receivesAnyYearValue() {
         Year expectedNextYear = new Year(2026);
@@ -127,6 +208,7 @@ public class YearTest {
         assertEquals(expectedNextYear, actualNextYear);
     }
 
+    // parseYear
     @Test
     public void parseYear_SHOULD_returnYearObject_WHEN_receivesYearValue() {
         //parseYear takes a year string and returns its year obj
@@ -141,6 +223,7 @@ public class YearTest {
         assertEquals(expectedYearObj, parsedYear);
     }
 
+    // parseYear
     @Test
     public void parseYear_SHOULD_returnTimePeriodException_WHEN_receivesInvalidYearValue() {
         // arrange
@@ -161,6 +244,7 @@ public class YearTest {
         });
     }
 
+    // peg
     @Test
     public void peg_SHOULD_shouldEvaluateToStartAndEndTime_WHEN_receivesValidStartAndEndCalenderYear() {
 
@@ -208,6 +292,7 @@ public class YearTest {
     }
 
 
+    // previous
     @Test
     public void previous_SHOULD_returnPreviousYear_WHEN_receivesAnyYearValue() {
         Year expectedPrevYear = new Year(2024);
@@ -227,6 +312,7 @@ public class YearTest {
         assertEquals(negativeYear, yearZero.previous());
     }
 
+    // toString
     @Test
     public void toString_SHOULD_returnString_WHEN_receivesYearValue() {
         // Arrange
@@ -250,5 +336,4 @@ public class YearTest {
             year.toString();
         });
     }
-
 }
