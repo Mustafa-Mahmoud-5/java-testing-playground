@@ -15,7 +15,7 @@ public class DiscountManager {
         }
 
         if (discountCalculator.isTheSpecialWeek())
-            return price * .8;
+            return price * .8; // 20% discount
 
         return price * discountCalculator.getDiscountPercentage();
     }
